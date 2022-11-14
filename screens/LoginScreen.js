@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, } from 'react-native'
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { withSafeAreaInsets } from 'react-native-safe-area-context'
 import { auth } from '../firebase'
@@ -13,10 +13,9 @@ const LoginScreen = () => {
     useEffect(() => {
         const unsuscribe = auth.onAuthStateChanged(user => {
             if (user) {
-                navigation.navigate('Home')
+                navigation.replace('HomeScreen')
             }
         })
-
         return unsuscribe
     }, [])
 
@@ -43,14 +42,19 @@ const LoginScreen = () => {
     }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? "padding" : "height"}>
         <View style={styles.inputContainer}>
-            <TextInput placeholder='Correo Electronico' 
+            <Image 
+            style={styles.logo}
+            source={{uri: 'https://i.imgur.com/yWGIIZw.png'}}
+            ></Image>
+
+            <TextInput placeholder='Correo Electronico' placeholderTextColor={'#027373'}
             value={email} onChangeText={text => setEmail(text)}
             style={styles.input}
             />
 
-            <TextInput placeholder='Contraseña'
+            <TextInput placeholder='Contraseña' placeholderTextColor={'#027373'}
             value={password} onChangeText={text => setPassword(text)}
             style={styles.input}
             secureTextEntry
@@ -80,6 +84,7 @@ export default LoginScreen
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: '#F2E7DC',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -88,12 +93,15 @@ const styles = StyleSheet.create({
         width: '80%',
     },
     input: {
-        backgroundColor: 'white',
+        backgroundColor: '#f2f2f2',
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderRadius: 10,
         marginTop: 5,
+        borderWidth: 1,
+        borderColor: '#0D0D0D'
     },
+    
     buttonContainer: {
         width: '60%',
         justifyContent: 'center',
@@ -101,28 +109,36 @@ const styles = StyleSheet.create({
         marginTop: 40,
     },
     button: {
-        backgroundColor: '#3E6E8C',
+        backgroundColor: '#A9D9D0',
         width: '100%',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center'
     },
     buttonOutline: {
-        backgroundColor: 'white',
+        backgroundColor: '#f2f2f2',
         marginTop: 5,
-        borderColor: '#3E6E8C',
+        borderColor: '#A9D9D0',
         borderWidth: 2,
     },
     buttonText:{
-        color: 'white',
+        color: '#f2f2f2',
         fontWeight: '700',
         fontSize: 18,
     },
     buttonOutlineText: {
-        color: '#3E6E8C',
+        color: '#A9D9D0',
         fontWeight: '700',
         fontSize: 18,
     },
+
+    logo:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 300,
+        height: 300,
+    },
+
 
 
 })
